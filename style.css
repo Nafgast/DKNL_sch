@@ -1,0 +1,300 @@
+/* style.css – mobile-first */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Arial, sans-serif; line-height:1.6; }
+
+header { display:flex; justify-content:space-between; padding:1rem; background:#004d40; color:white; }
+.logo { height:50px; }
+.menu-btn, .login { background:none; border:none; color:white; font-size:1.2rem; }
+
+.hero { text-align:center; padding:2rem 1rem; background:#e8f5e9; }
+.hero h1 { font-size:1.5rem; margin-bottom:1rem; }
+.cta a { display:inline-block; margin:0.5rem; padding:0.8rem 1.2rem; background:#25d366; color:white; text-decoration:none; border-radius:5px; }
+.cta a:last-child { background:#0e200e; }
+
+.quick-links { display:flex; overflow-x:auto; padding:1rem; gap:1rem; }
+.quick-links a { padding:0.8rem 1rem; background:#004d40; color:white; text-decoration:none; white-space:nowrap; border-radius:5px; }
+
+.cards { display:flex; overflow-x:auto; gap:1rem; padding:1rem; }
+.card { min-width:250px; padding:1rem; background:#f0f0f0; border-radius:8px; }
+
+footer { text-align:center; padding:1.5rem; background:#333; color:white; font-size:0.9rem; }
+.social a { color:#25d366; margin:0 0.5rem; }
+
+/* Desktop */
+@media (min-width:768px) {
+  .hero h1 { font-size:2.5rem; }
+  .quick-links, .cards { flex-wrap:wrap; justify-content:center; }
+}
+
+
+/* ——— ADMIN LOGIN & DASHBOARD ——— */
+.admin-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-container h2 {
+    color: #004d40;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.admin-form input[type="password"],
+.admin-form input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border: 1.5px solid #a5d6a7;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: border 0.3s;
+}
+
+.admin-form input:focus {
+    outline: none;
+    border-color: #004d40;
+    box-shadow: 0 0 0 3px rgba(0, 77, 64, 0.1);
+}
+
+.admin-btn {
+    background: #004d40;
+    color: white;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.admin-btn:hover {
+    background: #00332a;
+}
+
+.admin-msg {
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.admin-msg.success {
+    background: #e8f5e9;
+    color: #1b5e20;
+    border: 1px solid #a5d6a7;
+}
+
+.admin-msg small {
+    display: block;
+    margin-top: 15px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.logout-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #d32f2f;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+/* ——— RESULT CHECKER PAGE ——— */
+.result-container {
+    max-width: 520px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.result-container h2 {
+    color: #004d40;
+    margin-bottom: 20px;
+    font-size: 1.9rem;
+    font-weight: 600;
+}
+
+.result-form input {
+    width: 100%;
+    padding: 15px;
+    margin: 12px 0;
+    border: 1.5px solid #a5d6a7;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.result-form input:focus {
+    border-color: #004d40;
+    box-shadow: 0 0 0 3px rgba(0, 77, 64, 0.15);
+    outline: none;
+}
+
+.result-btn {
+    background: #004d40;
+    color: white;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.result-btn:hover {
+    background: #00332a;
+}
+
+/* Result Card */
+.result-card {
+    margin-top: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border-radius: 10px;
+    border-left: 6px solid #004d40;
+    text-align: left;
+    animation: fadeIn 0.5s ease;
+}
+
+.result-card h3 {
+    margin: 0 0 10px;
+    color: #1b5e20;
+    font-size: 1.4rem;
+}
+
+.result-card p {
+    margin: 8px 0;
+    font-size: 1.05rem;
+    color: #333;
+}
+
+.result-card strong {
+    color: #004d40;
+}
+
+/* Grade Colors */
+.grade-A { color: #1b5e20; font-weight: bold; }
+.grade-B { color: #33691e; font-weight: bold; }
+.grade-C { color: #827717; font-weight: bold; }
+.grade-D { color: #f9a825; font-weight: bold; }
+.grade-F { color: #c62828; font-weight: bold; }
+
+/* Error Message */
+.error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px solid #ffcdd2;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .admin-container, .result-container {
+        margin: 20px auto;
+        padding: 20px;
+    }
+    .admin-container h2, .result-container h2 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* HEADER & NAV */
+.header-content {
+  display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; flex-wrap: wrap; gap: 1rem;
+}
+.logo { height: 60px; }
+.school-name { font-size: 1.5rem; color: #004d40; margin: 0; }
+.main-nav { position: relative; }
+.menu-btn { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; }
+.nav-links {
+  display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;
+}
+.nav-links a {
+  color: #004d40; font-weight: 600; text-decoration: none; padding: 0.5rem 0;
+}
+.login-btn {
+  background: #004d40; color: white; padding: 0.5rem 1rem; border-radius: 6px;
+}
+.login-btn:hover { background: #00332a; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(rgba(0,77,64,0.8), rgba(0,77,64,0.9)), url('images/hero.jpg') center/cover no-repeat;
+  color: white; text-align: center; padding: 4rem 1rem;
+}
+.hero h1 { font-size: 2.5rem; margin: 0 0 1rem; }
+.tagline { font-size: 1.2rem; margin-bottom: 1.5rem; }
+
+/* QUICK LINKS */
+.quick-links-section {
+  background: #f5f5f5; padding: 3rem 1rem; text-align: center;
+}
+.quick-links {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+}
+.ql-card {
+  background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-decoration: none; color: #333; transition: transform 0.3s;
+}
+.ql-card:hover { transform: translateY(-5px); }
+.ql-card span { display: block; font-weight: bold; font-size: 1.2rem; color: #004d40; }
+
+/* CARDS */
+.cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;
+}
+.card {
+  background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); transition: 0.3s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.12); }
+.card h3 { margin: 0 0 0.5rem; color: #004d40; }
+
+/* FOOTER */
+footer {
+  background: #004d40; color: white; padding: 3rem 1rem 1rem; font-size: 0.95rem;
+}
+.footer-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;
+}
+.footer-col h3 { color: #a5d6a7; margin-bottom: 1rem; }
+.footer-col a { color: #e8f5e9; text-decoration:43 none; display: block; margin: 0.5rem 0; }
+.social a { display: inline-block; margin-right: 1rem; }
+.copyright { text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #a5d6a7; }
+.copyright a { color: #fff; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .menu-btn { display: block; }
+  .nav-links {
+    position: absolute; top: 100%; left: 0; width: 100%; background: white; flex-direction: column; padding: 1rem; box-shadow: 0 5px 10px rgba(0,0,0,0.1); display: none;
+  }
+  .nav-links.active { display: flex; }
+  .hero h1 { font-size: 2rem; }
+}

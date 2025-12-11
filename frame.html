@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NAFGAST Secondary School | Excellence in Education</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="crest.png" type="image/png">
+  <meta name="description" content="NAFGAST Secondary School - 2025/2026 Admission Open. WAEC Result Checker, Pay Fees Online, Download Forms.">
+  <style>
+    .btn { display: inline-block; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 8px; }
+    .wa { background: #25d366; color: white; }
+    .wa:hover { background: #128c7e; }
+    .download { background: #004d40; color: white; }
+    .download:hover { background: #00332a; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="container header-content">
+    <img src="logo.jpg" alt="NAFGAST Crest" class="logo">
+    <h1 class="school-name">NAFGAST Secondary School</h1>
+    <nav class="main-nav">
+      <button class="menu-btn" aria-label="Toggle Menu">Menu</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="forms/admission.php">Admissions</a>
+        <a href="results/checker.php">Results</a>
+        <a href="calendar/">Calendar</a>
+        <a href="fees/">Fees</a>
+        <a href="contact.html">Contact</a>
+        <a href="portal student/login.php" class="login-btn">Student/Parent Login</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+  <div class="container hero-content">
+    <h1>2025/2026 Admission in Progress!</h1>
+    <p class="tagline">Join a legacy of academic excellence and moral upbringing.</p>
+    <div class="cta">
+      <a href="https://wa.me/2349165749205?text=Hello,%20I%20want%20to%20apply%20for%202025/2026%20admission" 
+         class="btn wa" target="_blank">
+        Apply via WhatsApp
+      </a>
+      <a href="forms/admission-form.pdf" class="btn download" download>
+        Download Form
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK LINKS -->
+<section class="quick-links-section">
+  <div class="container">
+        <div class="quick-links">
+      <a href="forms/admission.php" class="ql-card">
+        <span>Admissions</span>
+        <p>Apply Now</p>
+      </a>
+      <a href="results/checker.php" class="ql-card">
+        <span>WAEC Results</span>
+        <p>Check Results</p>
+      </a>
+           <a href="portal student/login.php" class="ql-card">
+        <span>Student Portal</span>
+        <p>Login Here</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST NEWS -->
+<section class="news">
+  <div class="container">
+    <h2>Latest News</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>JSS3 Excels in BECE 2025</h3>
+        <p>98% pass rate with 15 distinctions!</p>
+        <small>Nov 8, 2025</small>
+      </div>
+      <div class="card">
+        <h3>PTA Meeting</h3>
+        <p>Thursday, 12 Nov | 10:00 AM</p>
+        <small>Nov 5, 2025</small>
+      </div>
+      <div class="card">
+        <h3>Science Fair Winners</h3>
+        <p>Senior Category: Team Quantum</p>
+        <small>Nov 1, 2025</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UPCOMING EVENTS -->
+  <div class="container">
+    <h2>Upcoming Events</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Resumption Date</h3>
+        <p>First Term: <strong>12 Jan 2026</strong></p>
+      </div>
+      <div class="card">
+        <h3>Inter-House Sports</h3>
+        <p>Friday, 28 Feb 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <h3>NAFGAST Secondary School</h3>
+      <p>123 Oba Akinjobi Way, GRA Ikeja, Lagos</p>
+      <p>09165749205 | admin@nafgsat.sch.ng</p>
+    </div>
+    <div class="footer-col">
+         </div>
+    <div class="footer-col">
+      <h3>Connect With Us</h3>
+      <div class="social">
+        <a href="https://wa.me/2349165749205" target="_blank">WhatsApp</a>
+        <a href="https://facebook.com/nafgsat" target="_blank">Facebook</a>
+        <a href="https://instagram.com/nafgsat" target="_blank">Instagram</a>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>© 2025 NAFGAST Secondary School. All rights reserved. | Powered by <a href="https://www.linkedin.com/in/precious-adekunle-954a16284" target="_blank">Precious Adekunle</a></p>
+  </div>
+</footer>
+
+<!-- Mobile Menu Script -->
+<script>
+  const menuBtn = document.querySelector('.menu-btn');
+  const navLinks = document.getElementById('navLinks');
+
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
+
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
+  });
+</script>
+
+</body>
+</html>
