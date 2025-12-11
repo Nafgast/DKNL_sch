@@ -1,21 +1,289 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><title>WAEC Checker</title></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>WAEC Result Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #c8e6c9);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #2e7d32;
+    }
+
+    .checker-container {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 48px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .checker-container:hover {
+      transform: translateY(-8px);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo svg {
+      width: 80px;
+      height: 80px;
+      fill: #4caf50;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 30px;
+      font-weight: 700;
+      color: #1b5e20;
+      letter-spacing: -0.5px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2e7d32;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    input {
+      margin-top: 8px;
+      padding: 15px 16px;
+      font-size: 16px;
+      border: 2px solid #c8e6c9;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.3s ease;
+      background: #f8fff8;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+      background: white;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #4caf50, #388e3c);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(76, 175, 80, 0.4);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    #resultArea {
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    #out {
+      padding: 20px;
+      background: #f1f8e9;
+      border: 1px solid #c8e6c9;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 15px;
+      color: #1b5e20;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #out.show {
+      opacity: 1;
+    }
+
+    #error {
+      color: #e53935;
+      display: none;
+      margin-top: 12px;
+    }
+
+    .loading {
+      text-align: center;
+      margin-top: 20px;
+      color: #4caf50;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
 <body>
-  <h1>Result Checker</h1>
-  <form id="checkForm">
-    <label>Exam Number: <input name="examNumber" required></label><br>
-    <label>Year: <input name="year"></label><br>
-    <button type="submit">Check</button>
-  </form>
-  <pre id="out"></pre>
+
+  <div class="checker-container">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM9 17l-4-4 1.41-1.41L9 14.17l7.59-7.59L18 8l-9 9z"/>
+      </svg>
+    </div>
+    <h1>WAEC Result Checker</h1>
+
+    <form id="checkForm" novalidate>
+      <label>
+        Examination Number
+        <input type="text" name="examNumber" placeholder="e.g. 12345678AB" required autocomplete="off">
+      </label>
+
+      <label>
+        Examination Year
+        <input type="text" name="year" placeholder="e.g. 2024" maxlength="4" required>
+      </label>
+
+      <button type="submit" id="checkBtn">Check Result</button>
+      <div class="loading" id="loading" role="status" aria-live="polite" style="display:none">Checking result, please wait...</div>
+    </form>
+
+    <div id="resultArea">
+      <div id="error" role="alert" aria-live="assertive" style="color:#e53935; display:none; margin-top:12px"></div>
+      <pre id="out" aria-live="polite"></pre>
+    </div>
+  </div>
+
   <script>
-    document.getElementById('checkForm').addEventListener('submit', async (e) => {
+    const form = document.getElementById('checkForm');
+    const output = document.getElementById('out');
+    const loading = document.getElementById('loading');
+    const checkBtn = document.getElementById('checkBtn');
+    const errorEl = document.getElementById('error');
+
+    function showError(msg) {
+      errorEl.textContent = msg;
+      errorEl.style.display = 'block';
+      output.textContent = '';
+      output.classList.remove('show');
+    }
+
+    function clearMessages() {
+      errorEl.textContent = '';
+      errorEl.style.display = 'none';
+      output.textContent = '';
+      output.classList.remove('show');
+    }
+
+    function renderResult(json) {
+      // If API returns structured result, render nicely
+      if (json && json.result) {
+        const r = json.result;
+        let txt = '';
+        txt += `Examination Number: ${r.examNumber || ''}\n`;
+        txt += `Year: ${r.year || ''}\n`;
+        if (r.name) txt += `Name: ${r.name}\n`;
+        if (r.grades && typeof r.grades === 'object') {
+          txt += '\nGrades:\n';
+          for (const [sub, grade] of Object.entries(r.grades)) {
+            txt += `  ${sub}: ${grade}\n`;
+          }
+        } else {
+          // fallback to pretty JSON
+          txt += '\n' + JSON.stringify(r, null, 2);
+        }
+        output.textContent = txt;
+      } else {
+        // general fallback
+        output.textContent = JSON.stringify(json, null, 2);
+      }
+      output.classList.add('show');
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
-      const res = await fetch('/api/checker', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-      const json = await res.json();
-      document.getElementById('out').textContent = JSON.stringify(json, null, 2);
+      clearMessages();
+
+      // prevent duplicate submissions
+      if (checkBtn.disabled) return;
+
+      // basic validation
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form));
+      data.examNumber = (data.examNumber || '').trim();
+      data.year = (data.year || '').trim();
+
+      // validate year digits
+      if (!/^\d{4}$/.test(data.year)) {
+        showError('Please enter a valid 4-digit year.');
+        return;
+      }
+
+      loading.style.display = 'block';
+      checkBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/checker', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        // try parse json safely
+        let json = null;
+        try { json = await res.json(); } catch (err) { /* ignore parse error */ }
+
+        if (!res.ok) {
+          if (res.status === 404) showError('Result not found.');
+          else showError((json && json.error) || 'Server error. Please try again later.');
+          return;
+        }
+
+        // handle common API shapes
+        if (json && json.found === false) {
+          showError('Result not found.');
+        } else {
+          renderResult(json);
+        }
+      } catch (err) {
+        showError('Error: Could not connect to server. Please try again later.');
+      } finally {
+        loading.style.display = 'none';
+        checkBtn.disabled = false;
+      }
     });
   </script>
 </body>
