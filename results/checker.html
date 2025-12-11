@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>WAEC Checker</title></head>
+<body>
+  <h1>Result Checker</h1>
+  <form id="checkForm">
+    <label>Exam Number: <input name="examNumber" required></label><br>
+    <label>Year: <input name="year"></label><br>
+    <button type="submit">Check</button>
+  </form>
+  <pre id="out"></pre>
+  <script>
+    document.getElementById('checkForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const res = await fetch('/api/checker', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      const json = await res.json();
+      document.getElementById('out').textContent = JSON.stringify(json, null, 2);
+    });
+  </script>
+</body>
+</html>

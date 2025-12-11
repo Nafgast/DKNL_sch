@@ -1,0 +1,14 @@
+{
+  "name": "nafgast-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "vercel dev",
+    "dev": "vercel dev",
+    "seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "mongodb": "^5.7.0",
+    "dotenv": "^16.0.0"
+  }
+}

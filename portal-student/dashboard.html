@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Student Dashboard</title></head><body>
+<h1>Student Dashboard</h1>
+<pre id="info"></pre>
+<button id="logout">Logout</button>
+<script>
+async function load(){
+  const token = localStorage.getItem('studentToken');
+  if(!token) return location.href='/portal-student/login.html';
+  const res = await fetch('/api/portal/dashboard?token='+token);
+  const json = await res.json();
+  if(json.error) return location.href='/portal-student/login.html';
+  document.getElementById('info').textContent = JSON.stringify(json.user, null, 2);
+}
+document.getElementById('logout').addEventListener('click', async ()=>{
+  const token = localStorage.getItem('studentToken');
+  await fetch('/api/portal/logout', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ token }) });
+  localStorage.removeItem('studentToken');
+  location.href='/portal-student/login.html';
+});
+load();
+</script>
+</body></html>
