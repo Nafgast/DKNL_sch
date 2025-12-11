@@ -1,25 +1,258 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Admission Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #c8e6c9);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #2e7d32;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 48px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+      width: 100%;
+      max-width: 480px;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .form-container:hover {
+      transform: translateY(-8px);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 30px;
+      font-weight: 700;
+      color: #1b5e20;
+      letter-spacing: -0.5px;
+    }
+
+    .icon {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .icon svg {
+      width: 72px;
+      height: 72px;
+      fill: #4caf50;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2e7d32;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    input {
+      margin-top: 8px;
+      padding: 15px 16px;
+      font-size: 16px;
+      border: 2px solid #c8e6c9;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.3s ease;
+      background: #f8fff8;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+      background: white;
+    }
+
+    input:invalid:focus {
+      border-color: #e57373;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #4caf50, #388e3c);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(76, 175, 80, 0.4);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .success-message {
+      text-align: center;
+      margin-top: 20px;
+      color: #2e7d32;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    #errorMsg {
+      color: #e53935;
+      margin-top: 12px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Admission Form</h1>
-  <form id="admissionForm">
-    <label>Name: <input name="name" required></label><br>
-    <label>Phone: <input name="phone"></label><br>
-    <label>Email: <input name="email" type="email"></label><br>
-    <button type="submit">Submit</button>
-  </form>
+
+  <div class="form-container">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+    </div>
+    <h1>Admission Form</h1>
+
+    <form id="admissionForm" novalidate>
+      <label>
+        Full Name
+        <input type="text" name="name" required autocomplete="name" minlength="2">
+      </label>
+
+      <label>
+        Phone Number
+        <input type="tel" name="phone" pattern="^\+?[0-9\-\s]{7,20}$" placeholder="+234 812 345 6789" autocomplete="tel">
+      </label>
+
+      <label>
+        Email Address
+        <input type="email" name="email" autocomplete="email">
+      </label>
+
+      <!-- Honeypot field to trap bots (should remain hidden) -->
+      <label style="display:none;">
+        Do not fill
+        <input type="text" name="website" tabindex="-1" autocomplete="off">
+      </label>
+
+      <button type="submit" id="submitBtn">Submit Application</button>
+    </form>
+
+    <div class="success-message" id="successMsg" role="status" aria-live="polite">Thank you! Your application has been submitted successfully.</div>
+    <div id="errorMsg" role="alert" aria-atomic="true" style="color:#e53935;margin-top:12px;display:none"></div>
+  </div>
+
   <script>
     const form = document.getElementById('admissionForm');
+    const successMsg = document.getElementById('successMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    let isSubmitting = false;
+
+    function showError(message) {
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+      errorMsg.focus && errorMsg.focus();
+    }
+
+    function clearError() {
+      errorMsg.textContent = '';
+      errorMsg.style.display = 'none';
+    }
+
+    // Basic phone validation helper (matches digits, spaces, + and dashes)
+    function validPhone(value) {
+      if (!value) return true; // phone optional
+      const re = /^\+?[0-9\-\s]{7,20}$/;
+      return re.test(value.trim());
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(form));
-      const res = await fetch('/api/admission', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-      const json = await res.json();
-      alert(json.success ? 'Submitted' : (json.error || 'Error'));
+      if (isSubmitting) return; // prevent duplicate submissions
+      clearError();
+
+      // Honeypot check
+      const hp = form.querySelector('input[name="website"]').value;
+      if (hp) return; // silently ignore bot submission
+
+      // Basic HTML5 validation before sending
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const formData = Object.fromEntries(new FormData(form));
+
+      // client-side phone format check
+      if (!validPhone(formData.phone)) {
+        showError('Please enter a valid phone number (digits, spaces, + and - allowed).');
+        return;
+      }
+
+      isSubmitting = true;
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Submitting...';
+      successMsg.style.opacity = 0;
+
+      try {
+        const res = await fetch('/api/admission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        let json = null;
+        try { json = await res.json(); } catch (err) { /* ignore parse error */ }
+
+        if (!res.ok) {
+          showError((json && json.error) || 'Server error. Please try again later.');
+        } else if (json && json.success) {
+          form.reset();
+          successMsg.style.opacity = 1;
+          // Optional: redirect to a thank-you page after a short delay
+          setTimeout(() => { window.location.href = '/thankyou.html'; }, 1500);
+        } else {
+          showError((json && json.error) || 'Submission failed. Please try again.');
+        }
+      } catch (err) {
+        showError('Network error. Please check your connection.');
+      } finally {
+        isSubmitting = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     });
   </script>
 </body>

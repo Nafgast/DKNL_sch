@@ -1,19 +1,215 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>Admin Login</title></head><body>
-<h1>Admin Login</h1>
-<form id="login">
-  <label>Username <input name="username"></label><br>
-  <label>Password <input name="password" type="password"></label><br>
-  <button>Login</button>
-</form>
-<script>
-document.getElementById('login').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target));
-  const res = await fetch('/api/admin/login', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
-  const json = await res.json();
-  if (json.token) { localStorage.setItem('adminToken', json.token); location.href = '/admin/dashboard.html'; }
-  else alert(json.error || 'Login failed');
-});
-</script>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #c8e6c9);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2e7d32;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 48px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .login-container:hover {
+      transform: translateY(-8px);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1b5e20;
+      letter-spacing: -0.5px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2e7d32;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      margin-top: 8px;
+      padding: 14px 16px;
+      font-size: 16px;
+      border: 2px solid #c8e6c9;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.3s ease;
+      background: #f8fff8;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+      background: white;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #4caf50, #388e3c);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo svg {
+      width: 64px;
+      height: 64px;
+      fill: #4caf50;
+    }
+
+    #loginError {
+      color: #e53935;
+      margin-top: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2a3 3 0 0 0-3 3v1H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V5a3 3 0 0 0-3-3zm-1 3a1 1 0 1 1 2 0v1h-2V5zm-4 5h10v10H7V10z"/>
+      </svg>
+    </div>
+    <h1>Admin Login</h1>
+    <form id="login" novalidate>
+      <label>
+        Username
+        <input name="username" required autocomplete="username">
+      </label>
+      <label>
+        Password
+        <input name="password" type="password" required autocomplete="current-password">
+      </label>
+      <button type="submit" id="loginBtn">Login</button>
+    </form>
+
+    <div id="loginError" role="alert" aria-live="assertive" style="color:#e53935;margin-top:12px;display:none"></div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    let isLoggingIn = false;
+
+    function showLoginError(msg) {
+      loginError.textContent = msg;
+      loginError.style.display = 'block';
+      loginError.focus && loginError.focus();
+    }
+
+    function clearLoginError() {
+      loginError.textContent = '';
+      loginError.style.display = 'none';
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (isLoggingIn) return;
+      clearLoginError();
+
+      // Basic validation
+      if (!loginForm.checkValidity()) {
+        loginForm.reportValidity();
+        return;
+      }
+
+      const formData = Object.fromEntries(new FormData(loginForm));
+
+      isLoggingIn = true;
+      loginBtn.disabled = true;
+      const originalText = loginBtn.textContent;
+      loginBtn.textContent = 'Logging in...';
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        // handle non-2xx status codes
+        let json = null;
+        try { json = await res.json(); } catch (err) { /* ignore parse error */ }
+
+        if (!res.ok) {
+          showLoginError((json && json.error) || 'Login failed. Please try again.');
+          return;
+        }
+
+        if (json && json.token) {
+          // store token (for demo purposes localStorage used)
+          localStorage.setItem('adminToken', json.token);
+          // Redirect to admin dashboard
+          location.href = '/admin/dashboard.html';
+        } else {
+          showLoginError((json && json.error) || 'Invalid response from server.');
+        }
+      } catch (err) {
+        showLoginError('Network error. Please try again.');
+      } finally {
+        isLoggingIn = false;
+        loginBtn.disabled = false;
+        loginBtn.textContent = originalText;
+      }
+    });
+  </script>
+</body>
+</html>
